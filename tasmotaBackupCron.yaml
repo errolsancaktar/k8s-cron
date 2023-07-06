@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-tasmotas
+spec:
+  schedule: "0 3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: backupjob
+            image: busybox:latest
+            imagePullPolicy: Always
+            command:
+            - /bin/sh
+            - -c
+            - curl -s -XPOST -d "task=backupall" https://tasmota.sancaktar.net/index.php
+          restartPolicy: OnFailure
+
